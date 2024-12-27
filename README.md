@@ -5,37 +5,17 @@ A .stl, .wrl and .stp file is written into a file which can be imported and view
 The purpose of these tiny example programs is to show the most basic usage of the Open CASCADE 3D library possible, thus flattening the learning curve for a beginner (like me).
  
 
-## Installation
-
-Debian 8.9 (jessie) was used as operating system.
-
-* OpenCascade (https://www.opencascade.com/doc/occt-7.1.0/overview/html/occt_dev_guides__building.html)
-	* Building 3rd party libraries (https://www.opencascade.com/doc/occt-7.1.0/overview/html/occt_dev_guides__building_3rdparty_linux.html):
+## Installation - tested on ArchLinux
 		```
-		root> apt-get install g++ cmake cmake-curses-gui
-		root> apt-get install tcllib tklib tcl-dev tk-dev libfreetype-dev libxt-dev libxmu-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libfreeimage-dev libtbb-dev libgl2ps-dev 
-		root> apt-get install doxygen graphviz
-		root> apt-get install libqt4-dev libvtk6-dev libvtk6-qt-dev
+	* Download OpenCascade from https://github.com/Open-Cascade-SAS/OCCT/releases/tag/V7_8_1. 
+	* Configure
 		```
-	* Download OpenCascade from https://www.opencascade.com/content/latest-release. You must create an account in order to do so.
-	* Configure (https://www.opencascade.com/doc/occt-7.1.0/overview/html/occt_dev_guides__building_cmake.html):
+		tar -xvzf V7_8_1.tar.gz
+		cd V7_8_1
+		mkdir install
+		mkdir build
 		```
-		user> mkdir opencascade
-		user> cd opencascade/
-		user> cp ~/Downloads/opencascade-7.1.0.tgz .
-		user> tar -xvzf opencascade-7.1.0.tgz
-		user> mkdir install
-		user> mkdir build
-		```
-	* remove the lines containing "vtkRenderingFreeTypeOpenGL" from the files TKIVtk/EXTERNLIB and TKIVtkDraw/EXTERNLIB 
-	  or u will get an linker error ( see: https://www.opencascade.com/content/compataility-latest-versions-vtk)
-		```
-		user> fgrep -irns vtkRenderingFreeTypeOpenGL ../opencascade-7.1.0/src/
-			     ../opencascade-7.1.0/src/TKIVtk/EXTERNLIB:17:vtkRenderingFreeTypeOpenGL
-			     ../opencascade-7.1.0/src/TKIVtkDraw/EXTERNLIB:23:vtkRenderingFreeTypeOpenGL
-		```
-		```
-		user> cd build && ccmake ../opencascade-7.1.0/
+		user> cd build && ccmake ../
 		```
 		* Adapt and configure the variables as you need them. 
 		* Press the c key several times in order to solve all dependencies and generate the makefiles with the g-key then.
@@ -54,33 +34,22 @@ Debian 8.9 (jessie) was used as operating system.
 				> USE_VTK                          ON
 	* Compile:
 		```
-		user> make
+		make
 		```
-	* Install:
-		* Link tcl8.6 to tcl8 if you get an that errormessage that tcl8 cannot be found: `root> ln -s /usr/lib/x86_64-linux-gnu/tcl8.6/ /usr/lib/x86_64-linux-gnu/tcl8`
-		```
-		user> make install
-		```
-	* Add the OpenCascade libraries to your library path:
-		```
-		root> cd /etc/ld.so.conf.d/
-		root> echo '/path_to/opencascade/install/lib' > opencascade.conf
-		root> ldconfig
 		``` 
 * occBasicSamples
 	```
-	user> git clone https://github.com/quirxi/occBasicSamples.git
-	user> cd occBasicSamples/src
-	user> rm include lib path_to_OpenCascade_*
-	user> ln -s ../../opencascade/install/lib/ lib
-	user> ln -s ../../opencascade/install/include/ include
-	user> cd Box
-	user> make
-			g++ -c -pipe -O3 -std=c++11 -Wall -W -g -D_REENTRANT -I../include/opencascade -o main.o main.cpp
-			g++  -o aBox.exe main.o -L../lib   -lTKernel -lTKPrim -lTKTopAlgo -lTKSTL -lTKVRML -lTKBRep -lTKG3d -lTKMesh
-	user> ./aBox.exe 
-	user>  ls -a
+	git clone https://github.com/quirxi/occBasicSamples.git
+	cd occBasicSamples/src
+	rm include lib path_to_OpenCascade_*
+	ln -s /home/tulip/OCCT/install/lib/ lib
+	ln -s /home/tulip/OCCT/install/include/ include
+	cd Box
+	make
+	./aBox.exe 
+	 ls -a
 			.  ..  aBox.exe  aBox.stl  aBox.wrl  main.cpp  main.o  Makefile
+	
 	```	
 
 
@@ -123,6 +92,7 @@ Up to now there are examples for following basic shapes available:
 ## Authors:
 
 * quirxi (https://github.com/quirxi)
+* updated by mztulip
 
 
 ## License
